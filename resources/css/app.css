@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+    font-family: "Inter", serif;
+    background-color: #18181A;
+    color: #fff;
+    @apply font-bold;
+}
+
+.input-wrapper{
+    @apply flex items-center gap-2 px-6 py-3 bg-primary  rounded-2xl w-full;
+}
+.btn-big{
+    @apply px-5 py-4 rounded-2xl justify-center flex items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80; 
+}
+.btn{
+    @apply px-5 py-2 rounded-xl flex justify-center items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80; 
+}
+.btn-primary{
+    @apply bg-primary text-white;
+}
+.btn-secondary{
+    @apply bg-white text-black;
+}
+
+input{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    @apply text-white;
+}
+
+.tab_item.active{
+    @apply bg-white text-black hover:bg-white;
+}
+.tab_item{
+    @apply p-2 w-full text-center rounded-lg  transition-all duration-300 hover:bg-primary cursor-pointer;
+}
