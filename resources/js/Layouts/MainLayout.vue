@@ -1,14 +1,17 @@
 <script setup>
 import Header from '../Components/Header.vue';
+import { ModalsContainer } from 'vue-final-modal'
+
 </script>
 
 <template>
     <Header />
     <div class="flex gap-2 page-wrapper">
-        <transition name="fade">
+   
             <slot />
-        </transition>
+ 
     </div>
+    <ModalsContainer />
 </template>
 
 <style>

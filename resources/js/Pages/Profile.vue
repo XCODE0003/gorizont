@@ -1,6 +1,11 @@
 <script setup>
 import MainLayout from '../Layouts/MainLayout.vue';
 import PostCard from '../Components/Product/PostCard.vue';
+import { ref } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+import { Link } from '@inertiajs/vue3';
+const authStore = useAuthStore();
+
 </script>
 
 <template>
@@ -10,15 +15,15 @@ import PostCard from '../Components/Product/PostCard.vue';
                 <div class="py-4 px-5 flex justify-between items-center rounded-2xl border border-white/10">
                     <div class="flex items-center gap-2">
                         <div class="w-16 h-16 text-2xl rounded-full bg-white/10 flex items-center justify-center">
-                            A
+                            {{ authStore?.user?.name[0] }}
                         </div>
                         <div class="flex flex-col gap-1">
-                            <p class="text-white text-xl leading-none">John Doe</p>
+                            <p class="text-white text-xl leading-none">{{ authStore?.user?.name }}</p>
                             <p class="text-white/60 text-sm font-light leading-none">Нет подписчиков</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button class="btn btn-primary py-3 px-3">
+                        <Link href="/post/new" class="btn btn-primary py-3 px-3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -26,7 +31,7 @@ import PostCard from '../Components/Product/PostCard.vue';
                             </svg>
 
 
-                        </button>
+                        </Link>
                     </div>
                 </div>
                 <div class="py-12 px-5 rounded-2xl bg-primary/50 border border-white/10 flex flex-col gap-5">

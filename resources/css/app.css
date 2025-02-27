@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+:root{
+    --p-scrollbar-width: 0px !important;
+}
 body {
     font-family: "Inter", serif;
     background-color: #18181A;
