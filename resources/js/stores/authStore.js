@@ -28,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await axios.post('/api/register', userData);
                 this.user = response.data.user;
+                router.visit('/');
             } catch (error) {
                 this.error = error.response?.data?.message || 'Ошибка регистрации';
             } finally {

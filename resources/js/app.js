@@ -1,8 +1,6 @@
 import "../css/app.css";
 import "./bootstrap";
-import 'vue-final-modal/style.css'
-
-
+import ToastService from 'primevue/toastservice';
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
@@ -12,10 +10,9 @@ import { createPinia } from "pinia";
 import axios from "./axios";
 import Aura from "@primeuix/themes/aura";
 import { definePreset } from "@primeuix/themes";
-import { createVfm } from 'vue-final-modal'
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
-const vfm = createVfm()
+const pinia = createPinia();
 const CustomTheme = definePreset(Aura, {
     semantic: {
         colorScheme: {
@@ -35,6 +32,17 @@ const CustomTheme = definePreset(Aura, {
                     root: {},
                     toolbar: {},
                     content: {},
+                },
+            },
+        },
+        select: {
+            colorScheme: {
+                dark: {
+                    primary: {
+                        color: "#fff",
+                        inverseColor: "#ffffff",
+                        hoverColor: "#fff",
+                    },
                 },
             },
         },
@@ -60,11 +68,9 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
-     
             .use(plugin)
             .use(ZiggyVue)
-         
-            .use(createPinia())
+            .use(pinia)
             .use(PrimeVue, {
                 theme: {
                     preset: CustomTheme,
@@ -72,8 +78,9 @@ createInertiaApp({
                         darkModeSelector: ".dark-mode",
                     },
                 },
+                
             })
-            .use(vfm)
+            .use(ToastService)
             .mount(el);
 
         window.axios = axios;

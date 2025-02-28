@@ -1,7 +1,6 @@
 <script setup>
 import Header from '../Components/Header.vue';
-import { ModalsContainer } from 'vue-final-modal'
-
+import Toast from 'primevue/toast';
 </script>
 
 <template>
@@ -11,7 +10,7 @@ import { ModalsContainer } from 'vue-final-modal'
             <slot />
  
     </div>
-    <ModalsContainer />
+    <Toast />
 </template>
 
 <style>

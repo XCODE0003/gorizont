@@ -34,6 +34,12 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'name.required' => 'Поле имя обязательно для заполнения',
+            'name.string' => 'Поле имя должно быть строкой',
+            'name.max' => 'Поле имя не должно превышать 255 символов',
+            'email.required' => 'Поле email обязательно для заполнения',
+            
         ]);
 
         $user = User::create([
@@ -46,6 +52,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect('/');
     }
 }

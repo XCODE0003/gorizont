@@ -34,18 +34,20 @@ const handleRegister = async () => {
                     <AuthTab :activeTab="`register`" />
 
 
-                    <div class="input-wrapper">
-                        <input v-model="email" type="text" placeholder="Почта" class="w-full text-lg" />
-                    </div>
-                    <div class="input-wrapper">
-                        <input v-model="name" type="text" placeholder="Имя" class="w-full text-lg" />
-                    </div>
-                    <div class="input-wrapper">
-                        <input v-model="password" type="password" placeholder="Пароль" class="w-full text-lg" />
-                    </div>
-                    <div class="input-wrapper">
-                        <input v-model="password_confirmation" type="password" placeholder="Повторите пароль"
-                            class="w-full text-lg" />
+                    <div class="flex flex-col gap-2">
+                        <div class="input-wrapper">
+                            <input v-model="email" type="text" placeholder="Почта" class="w-full " />
+                        </div>
+                        <div class="input-wrapper">
+                            <input v-model="name" type="text" placeholder="Имя" class="w-full " />
+                        </div>
+                        <div class="input-wrapper">
+                            <input v-model="password" type="password" placeholder="Пароль" class="w-full " />
+                        </div>
+                        <div class="input-wrapper">
+                            <input v-model="password_confirmation" type="password" placeholder="Повторите пароль"
+                                class="w-full " />
+                        </div>
                     </div>
                     <div class="btn btn-secondary py-3" :class="{ 'opacity-50': authStore.loading }"
                         @click="handleRegister">

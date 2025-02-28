@@ -13,5 +13,5 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
 Route::group(['prefix' => 'profile'], function () {
-    Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
-});
+    Route::get('/{id}', [ProfileController::class, 'index'])->name('profile.index');
+})->middleware('auth');

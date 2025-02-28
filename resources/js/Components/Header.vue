@@ -44,7 +44,7 @@ const toggleMenu = () => {
                 <div class="flex h-10 w-10 select-none rounded-full bg-white/10 items-center justify-center">
                     <span class="text-white">{{
                         authStore.user.name.charAt(0)
-                        }}</span>
+                    }}</span>
                 </div>
                 <transition name="fade">
                     <div v-if="isShowMenu" class="absolute z-50 right-0 top-14 bg-primary rounded-2xl py-3 px-4 w-60">
@@ -55,16 +55,16 @@ const toggleMenu = () => {
                                         class="flex h-10 w-10 select-none rounded-full bg-white/10 items-center justify-center">
                                         <span class="text-white">{{
                                             authStore.user.name.charAt(0)
-                                            }}</span>
+                                        }}</span>
                                     </div>
                                     <div class="flex flex-col items-start gap-1">
                                         <span class="text-white text-sm leading-none">{{ authStore.user.name }}</span>
                                         <span class="text-white/60 text-xs leading-none">{{ authStore.user.email
-                                            }}</span>
+                                        }}</span>
                                     </div>
                                 </div>
                             </div>
-                            <Link href="/profile" class="link_item">
+                            <Link :href="`/profile/${authStore.user.id}`" class="link_item">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"

@@ -1,29 +1,38 @@
 <script setup>
 import Dialog from 'primevue/dialog';
-import MainLayout from '../Layouts/MainLayout.vue';
-import PostCard from '../Components/Product/PostCard.vue';
+import MainLayout from '../../Layouts/MainLayout.vue';
+import PostCard from '../../Components/Product/PostCard.vue';
 import { ref } from "vue";
 import ToggleSwitch from 'primevue/toggleswitch';
-
+import { usePostStore } from '../../stores/postStore';
 import Editor from 'primevue/editor';
 import FileUpload from 'primevue/fileupload';
 import Select from 'primevue/select';
-
-import { VueFinalModal } from 'vue-final-modal'
-
+import { onMounted } from 'vue';
+import NewCategoryModal from '../../Components/Modal/NewCategoryModal.vue';
+import { Link } from '@inertiajs/vue3';
 const src = ref(null);
-const selectedCity = ref();
-const checked = ref(true);
+
+const props = defineProps({
+    article: Object,
+});
 
 
 const showPopupNewCategory = ref(false);
-const cities = ref([
-    { name: 'New York', code: 'NY' },
-    { name: 'Rome', code: 'RM' },
-    { name: 'London', code: 'LDN' },
-    { name: 'Istanbul', code: 'IST' },
-    { name: 'Paris', code: 'PRS' }
-]);
+const postStore = usePostStore();
+
+onMounted(async () => {
+    await postStore.getCategories();
+    postStore.title = props.article.title;
+    postStore.content = props.article.content;
+    postStore.category = postStore.categories.find(category => category.id === props.article.category_id);
+    postStore.comments = props.article.comment === 1 ? true : false;
+
+    src.value = '/storage/' + props.article.image;
+});
+
+
+
 function onFileSelect(event) {
     const file = event.files[0];
     const reader = new FileReader();
@@ -33,6 +42,7 @@ function onFileSelect(event) {
     };
 
     reader.readAsDataURL(file);
+    postStore.image = file;
 }
 </script>
 
@@ -40,10 +50,19 @@ function onFileSelect(event) {
     <MainLayout>
         <div class="max-w-xl mx-auto pb-20">
             <div class="flex flex-col gap-4">
+                <Link :href="`/post/${article.id}`" class="flex items-center gap-2 text-sm cursor-pointer text-white/60">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+
+                    Вернуться к статье
+                </Link>
                 <div class="flex flex-col gap-2">
                     <label for="title">Название статьи</label>
                     <div class="input-wrapper py-3 bg-transparent border border-white/20 rounded-xl">
-                        <input type="text" id="title" class="w-full " placeholder="Название статьи" />
+                        <input type="text" v-model="postStore.title" id="title" class="w-full "
+                            placeholder="Название статьи" />
                     </div>
                 </div>
 
@@ -51,7 +70,8 @@ function onFileSelect(event) {
 
                 <div class="flex flex-col gap-2">
                     <label for="title">Содержание</label>
-                    <Editor name="content" editorStyle="height: 320px;" class="rounded-2xl " />
+                    <Editor name="content" v-model="postStore.content" editorStyle="height: 320px;"
+                        class="rounded-2xl " />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label>Обложка статьи</label>
@@ -67,8 +87,9 @@ function onFileSelect(event) {
                 </div>
                 <div class="flex flex-col gap-2">
                     <label>Тематика статьи</label>
-                    <Select v-model="selectedCity" editable :options="cities" optionLabel="name"
-                        placeholder="Выберите тематику" class="w-full md:w-56 border-none bg-primary">
+                    <Select v-model="postStore.category" emptyMessage="Пока категорий нет" editable
+                        :options="postStore.categories" optionLabel="name" placeholder="Выберите тематику"
+                        class="w-full md:w-56 border-none bg-primary">
                         <template #footer>
                             <div class="py-1 pb-3 px-2">
                                 <div @click="showPopupNewCategory = true" class="btn btn-primary text-sm rounded-lg ">
@@ -87,19 +108,21 @@ function onFileSelect(event) {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <ToggleSwitch v-model="checked" />
+                    <ToggleSwitch v-model="postStore.comments" />
                     Включить комментарии
                 </div>
 
-                <div class="btn btn-secondary py-3 ">
-                    Опубликовать
-                </div>
+                <button @click="postStore.savePost(props.article.id)" class="btn btn-secondary py-3 ">
+                    Сохранить
+                </button>
+                <button class="btn btn-danger py-3 ">
+                    Удалить
+                </button>
             </div>
         </div>
         <Dialog v-model:visible="showPopupNewCategory" modal header="Добавить тематику" :style="{ width: '25rem' }">
-            <span class="text-surface-500 dark:text-surface-400 block mb-8">Добавьте новую тематику для статей.</span>
+            <NewCategoryModal />
 
-            
         </Dialog>
 
 

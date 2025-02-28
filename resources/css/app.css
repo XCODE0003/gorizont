@@ -5,6 +5,15 @@
 :root{
     --p-scrollbar-width: 0px !important;
 }
+.p-select-option.p-select-option-selected.p-focus{
+    background: #29292B !important;
+}
+.p-select-option.p-select-option-selected{
+    background: #29292B !important;
+}
+.text-wrapper img{
+    @apply rounded-xl;
+}
 body {
     font-family: "Inter", serif;
     background-color: #18181A;
@@ -13,7 +22,7 @@ body {
 }
 
 .input-wrapper{
-    @apply flex items-center gap-2 px-6 py-3 bg-primary  rounded-2xl w-full;
+    @apply flex items-center gap-2 px-6 py-3 bg-primary  rounded-xl w-full;
 }
 .btn-big{
     @apply px-5 py-4 rounded-2xl justify-center flex items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80; 
@@ -27,13 +36,16 @@ body {
 .btn-secondary{
     @apply bg-white text-black;
 }
+.btn-danger{
+    @apply bg-red text-white;
+}
 
 input{
     background-color: transparent;
     border: none;
     outline: none;
     padding: 0;
-    @apply text-white;
+    @apply text-white font-normal ;
 }
 
 .tab_item.active{

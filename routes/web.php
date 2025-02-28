@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Articles;
 
-Route::get('/', function () {
-    return Inertia::render('Index');
-});
+Route::get('/', [IndexController::class, 'index']);
+
 
 
 require __DIR__ . '/auth.php';

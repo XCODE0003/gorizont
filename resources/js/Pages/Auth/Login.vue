@@ -14,7 +14,7 @@ const handleLogin = () => {
         email: email.value,
         password: password.value
     });
-    
+
 };
 </script>
 
@@ -27,11 +27,13 @@ const handleLogin = () => {
 
                     <AuthTab :activeTab="`login`" />
 
-                    <div class="input-wrapper">
-                        <input v-model="email" type="text" placeholder="Почта" class="w-full text-lg" />
-                    </div>
-                    <div class="input-wrapper">
-                        <input v-model="password" type="password" placeholder="Пароль" class="w-full text-lg" />
+                    <div class="flex flex-col gap-2">
+                        <div class="input-wrapper">
+                            <input v-model="email" type="text" placeholder="Почта" class="w-full text-lg" />
+                        </div>
+                        <div class="input-wrapper">
+                            <input v-model="password" type="password" placeholder="Пароль" class="w-full text-lg" />
+                        </div>
                     </div>
                     <div v-if="authStore.error" class="text-red-500">
                         {{ authStore.error }}
@@ -40,10 +42,9 @@ const handleLogin = () => {
                         :disabled="authStore.loading" @click="handleLogin">
                         {{ authStore.loading ? 'Вход...' : 'Войти' }}
                     </button>
-                
+
                 </div>
             </div>
         </div>
     </MainLayout>
 </template>
-

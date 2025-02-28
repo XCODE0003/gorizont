@@ -21,6 +21,7 @@ export default {
            },
            colors: {
             'primary': '#29292B',
+            'red': '#d42222',
 
         } 
         },
