@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{id}', [PostController::class, 'index'])->name('post.index');
         Route::get('/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
         Route::post('/{id}/edit', [PostController::class, 'update'])->name('post.update');
+        Route::delete('/{id}/delete', [PostController::class, 'destroy'])->name('post.destroy');
     });
 
     Route::group(['prefix' => 'category'], function () {

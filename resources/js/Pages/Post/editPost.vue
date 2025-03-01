@@ -60,7 +60,7 @@ function onFileSelect(event) {
                 </Link>
                 <div class="flex flex-col gap-2">
                     <label for="title">Название статьи</label>
-                    <div class="input-wrapper py-3 bg-transparent border border-white/20 rounded-xl">
+                    <div class="input-wrapper-border">
                         <input type="text" v-model="postStore.title" id="title" class="w-full "
                             placeholder="Название статьи" />
                     </div>
@@ -115,7 +115,7 @@ function onFileSelect(event) {
                 <button @click="postStore.savePost(props.article.id)" class="btn btn-secondary py-3 ">
                     Сохранить
                 </button>
-                <button class="btn btn-danger py-3 ">
+                <button @click="postStore.deletePost(props.article.id)" class="btn btn-danger py-3 ">
                     Удалить
                 </button>
             </div>

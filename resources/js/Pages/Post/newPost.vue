@@ -42,7 +42,7 @@ function onFileSelect(event) {
             <div class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
                     <label for="title">Название статьи</label>
-                    <div class="input-wrapper py-3 bg-transparent border border-white/20 rounded-xl">
+                    <div class="input-wrapper-border">
                         <input type="text" v-model="postStore.title" id="title" class="w-full "
                             placeholder="Название статьи" />
                     </div>

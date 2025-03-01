@@ -18,9 +18,9 @@ defineProps({
 
 <template>
     <MainLayout>
-        <div class="max-w-xl mx-auto pb-20 ">
+        <div class="max-w-2xl w-full mx-auto pb-20 ">
             <div class="flex  flex-col gap-4">
-                <img :src="'/storage/' + article.image" alt="image" class="w-full h-44 object-cover rounded-lg">
+                <img :src="'/storage/' + article.image" alt="image" class="w-full h-64 object-cover rounded-lg">
                 <h1 class="text-2xl font-bold text-center">{{ article.title }}</h1>
                 <div class="text-white/60 font-normal text-wrapper" v-html="article.content"></div>
 

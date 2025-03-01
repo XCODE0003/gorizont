@@ -28,9 +28,18 @@ class PostController extends Controller
         return Inertia::render('Post/editPost', ['article' => $article]);
     }
 
+    public function destroy($id)
+    {
+        $article = Articles::find($id);
+        $user = auth()->user();
+        if(!$article || $article->user_id !== $user->id) {
+            return redirect('/');
+        }
+        $article->delete();
+        return response()->json(['success' => true, 'message' => 'Статья успешно удалена']);
+    }
     public function update(Request $request, $id)
     {
-
         $request->validate(
             [
                 'title' => 'required|string|max:255',
@@ -102,6 +111,6 @@ class PostController extends Controller
             'user_id' => auth()->user()->id,
         ]);
         
-        return response()->json(['message' => 'Статья успешно создана']);
+        return response()->json(['message' => 'Статья успешно создана', 'article' => $article]);
     }
 }

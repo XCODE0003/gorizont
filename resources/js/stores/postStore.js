@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
+import { router } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3'; // Импорт usePage для доступа к props
 
 export const usePostStore = defineStore('post', {
     state: () => ({
@@ -77,8 +79,24 @@ export const usePostStore = defineStore('post', {
                 
                 if(response.status === 200) {
                     this.toast.add({ severity: 'success', summary: 'Успешно', detail: 'Статья успешно создана', life: 3000 });
+                    console.log(response.data);
+                    router.visit('/post/'+response.data.article.id);
                 }
             } catch(error) {
+                console.log(error);
+                this.toast.add({ severity: 'error', summary: 'Ошибка', detail: error.response.data.message , life: 3000 });
+            }
+        },
+        async deletePost(id){
+            try {
+                const response = await axios.delete('/post/'+id+'/delete');
+                if(response.status === 200) {
+                    this.toast.add({ severity: 'success', summary: 'Успешно', detail: 'Статья успешно удалена', life: 3000 });
+                    const userId = usePage().props.auth.user.id;
+                    router.visit('/profile/'+userId);
+                }
+            } catch(error) {
+                console.log(error);
                 this.toast.add({ severity: 'error', summary: 'Ошибка', detail: error.response.data.message , life: 3000 });
             }
         }

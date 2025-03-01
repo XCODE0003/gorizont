@@ -43,7 +43,7 @@ const toggleMenu = () => {
                 class="flex relative items-center  p-1 rounded-full hover:bg-white/10 cursor-pointer transition-all duration-300 gap-4">
                 <div class="flex h-10 w-10 select-none rounded-full bg-white/10 items-center justify-center">
                     <span class="text-white">{{
-                        authStore.user.name.charAt(0)
+                        authStore?.user?.name?.charAt(0)
                     }}</span>
                 </div>
                 <transition name="fade">
