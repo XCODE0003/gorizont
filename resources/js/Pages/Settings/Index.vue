@@ -2,12 +2,14 @@
 import MainLayout from '../../Layouts/MainLayout.vue';
 import { ref } from 'vue';
 import Profile from '../../Components/Settings/Profile.vue';
+import Security from '../../Components/Settings/Security.vue';
+import Blacklist from '../../Components/Settings/Blacklist.vue';
 const activeTab = ref('profile');
 </script>
 
 <template>
     <MainLayout>
-        <div class="flex gap-6 max-w-2xl w-full items-stretch mx-auto pt-12">
+        <div class="flex gap-2 max-w-2xl w-full items-start mx-auto ">
             <div class="flex flex-col items-start justify-start py-4 px-3 rounded-xl bg-white/5 gap-2">
                 <div class="aside_link" :class="{ active: activeTab === 'profile' }" @click="activeTab = 'profile'">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -26,7 +28,7 @@ const activeTab = ref('profile');
 
                     <h1>Безопасность</h1>
                 </div>
-                <div class="aside_link" :class="{ active: activeTab === 'blacklist' }" @click="activeTab = 'blacklist'">
+                <!-- <div class="aside_link" :class="{ active: activeTab === 'blacklist' }" @click="activeTab = 'blacklist'">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -35,11 +37,13 @@ const activeTab = ref('profile');
 
 
                     <h1>Черный список</h1>
-                </div>
+                </div> -->
 
             </div>
             <div class="flex flex-1 bg-white/5 rounded-2xl">
                 <Profile v-if="activeTab === 'profile'" />
+                <Security v-if="activeTab === 'security'" />
+                <Blacklist v-if="activeTab === 'blacklist'" />
             </div>
         </div>
     </MainLayout>

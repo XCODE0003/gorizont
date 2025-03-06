@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Articles;
+use App\Models\Like;
+use App\Services\Article\Get as GetService;
 class PostController extends Controller
 {
     public function new()
@@ -14,15 +16,18 @@ class PostController extends Controller
 
     public function index($id)
     {
-        $article = Articles::find($id);
-        return Inertia::render('Post/Post', ['article' => $article]);
+        $article = (new GetService)->execute($id);
+        $isLiked = $article['isLiked'];
+        $comments = $article['comments'];
+        $article = $article['article'];
+        return Inertia::render('Post/Post', ['article' => $article, 'isLiked' => $isLiked, 'comments' => $comments]);
     }
 
     public function edit($id)
     {
-        
+
         $article = Articles::find($id);
-        if(!$article || $article->user_id !== auth()->user()->id) {
+        if (!$article || $article->user_id !== auth()->user()->id) {
             return redirect('/');
         }
         return Inertia::render('Post/editPost', ['article' => $article]);
@@ -32,7 +37,7 @@ class PostController extends Controller
     {
         $article = Articles::find($id);
         $user = auth()->user();
-        if(!$article || $article->user_id !== $user->id) {
+        if (!$article || $article->user_id !== $user->id) {
             return redirect('/');
         }
         $article->delete();
@@ -63,9 +68,9 @@ class PostController extends Controller
                 'comment.boolean' => 'Поле комментарии должно быть булевым',
             ]
         );
-        
+
         $article = Articles::find($id);
-        if(!$article || $article->user_id !== auth()->user()->id) {
+        if (!$article || $article->user_id !== auth()->user()->id) {
             return redirect('/');
         }
         $article->update([
@@ -99,7 +104,7 @@ class PostController extends Controller
                 'image.required' => 'Поле изображение обязательно для заполнения',
                 'image.image' => 'Поле изображение должно быть изображением',
                 'image.mimes' => 'Поле изображение должно быть изображением',
-                
+
             ]
         );
         $article = Articles::create([
@@ -110,7 +115,38 @@ class PostController extends Controller
             'comment' => $request->comment,
             'user_id' => auth()->user()->id,
         ]);
-        
+
         return response()->json(['message' => 'Статья успешно создана', 'article' => $article]);
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string',
+        ]);
+
+        $articles = Articles::where('title', 'like', '%' . $request->input('query') . '%')->get();
+        return response()->json(['articles' => $articles]);
+    }
+
+    public function like($id)
+    {
+        $article = Articles::find($id);
+        if (!$article) {
+            return response()->json(['success' => false, 'message' => 'Статья не найдена']);
+        }
+        $user = auth()->user();
+        $like = Like::where('article_id', $id)->where('user_id', $user->id)->first();
+        if ($like) {
+            $like->delete();
+        } else {
+            Like::create(['article_id' => $id, 'user_id' => $user->id]);
+        }
+
+        $article = (new GetService)->execute($id);
+        $isLiked = $article['isLiked'];
+        $comments = $article['comments'];
+        $article = $article['article'];
+        return response()->json(['success' => true, 'message' => 'Статья успешно обновлена', 'isLiked' => $isLiked, 'comments' => $comments, 'article' => $article]);
     }
 }

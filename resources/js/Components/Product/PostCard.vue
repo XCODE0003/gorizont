@@ -63,7 +63,7 @@ function cleanDescription(description) {
 <style scoped>
 
 .post-card {
-    @apply flex flex-col rounded-xl border border-white/10 overflow-hidden hover:opacity-80 transition-all duration-300 cursor-pointer  ; 
+    @apply flex flex-col  rounded-xl border border-white/10 overflow-hidden hover:opacity-80 transition-all duration-300 cursor-pointer  ; 
 }
 
 .title-truncate {

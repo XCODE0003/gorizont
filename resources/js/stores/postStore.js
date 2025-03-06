@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { router } from '@inertiajs/vue3';
-import { usePage } from '@inertiajs/vue3'; // Импорт usePage для доступа к props
+import { usePage } from '@inertiajs/vue3';
 
 export const usePostStore = defineStore('post', {
     state: () => ({

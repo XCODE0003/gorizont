@@ -13,6 +13,7 @@ class Articles extends Model
         'user_id',
         'category_id',
         'comment',
+        
     ];
 
     public function user()
@@ -24,4 +25,19 @@ class Articles extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'article_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'article_id');
+    }
+    public function likesCount()
+    {
+        return $this->likes()->count();
+    }
+
 }

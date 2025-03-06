@@ -13,15 +13,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 
+
+Route::get('/post/{id}', [PostController::class, 'index'])->name('post.index');
+Route::post('/post/search', [PostController::class, 'search'])->name('post.search');
 Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'post'], function () {
         Route::get('/new', [PostController::class, 'new'])->name('post.new');
         Route::post('/new', [PostController::class, 'store'])->name('post.store');
-        Route::get('/{id}', [PostController::class, 'index'])->name('post.index');
+
         Route::get('/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
         Route::post('/{id}/edit', [PostController::class, 'update'])->name('post.update');
         Route::delete('/{id}/delete', [PostController::class, 'destroy'])->name('post.destroy');
+        Route::post('/{id}/like', [PostController::class, 'like'])->name('post.like');
     });
 
     Route::group(['prefix' => 'category'], function () {
