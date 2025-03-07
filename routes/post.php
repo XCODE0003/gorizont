@@ -14,7 +14,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 
 
-Route::get('/post/{id}', [PostController::class, 'index'])->name('post.index');
+Route::get('/post/view/{id}', [PostController::class, 'index'])->name('post.index');
 Route::post('/post/search', [PostController::class, 'search'])->name('post.search');
 Route::group(['middleware' => 'auth'], function () {
 

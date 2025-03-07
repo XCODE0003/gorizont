@@ -51,7 +51,7 @@ function cleanDescription(description) {
 </script>
 
 <template>
-    <Link :href="'/post/' + id" class="post-card">
+    <Link :href="'/post/view/' + id" class="post-card">
         <img :src="'/storage/' + image" alt="image" class="w-full h-44 object-cover">
         <div class="flex flex-col gap-2 py-4 px-2">
             <p class="title-truncate font-bold">{{ title }}</p>

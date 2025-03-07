@@ -8,6 +8,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { Link } from '@inertiajs/vue3';
 import { useToast } from 'primevue/usetoast';
 import axios from 'axios';
+import AvatarUser from '../../Components/Global/AvatarUser.vue';
+
 const toast = useToast();
 
 const userStore = useAuthStore();
@@ -31,9 +33,10 @@ const isLiked = ref(props.isLiked);
 
 
 function like() {
-    axios.post(`/post/${article.id}/like`)
+    axios.post(`/post/${props.article.id}/like`)
         .then(response => {
             isLiked.value = !isLiked.value;
+            props.article.likesCount = response.data.article.likesCount;
         })
         .catch(error => {
             toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Статья не найдена' });
@@ -50,7 +53,9 @@ function like() {
                 <div class="text-white/60 font-normal text-wrapper" v-html="article.content"></div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div v-if="userStore.user && userStore.user.id !== article.user_id" class=" btn hover:bg-white/10 text-white/30 hover:text-white transition-all duration-300">
+                        <button @click="like" v-if="userStore.user && userStore.user.id !== article.user_id"
+                            :class="{ 'text-white': isLiked, 'text-white/30': !isLiked }"
+                            class=" btn hover:bg-white/10  hover:text-white transition-all duration-300">
                             <svg viewBox="0 -0.5 21 21" version="1.1" class="size-5" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -70,9 +75,39 @@ function like() {
                             </svg>
                             {{ article.likesCount }}
 
+                        </button>
+                    </div>
+                    <Link :href="`/profile/${article.user.id}`"
+                        class="flex items-center hover:bg-white/10 transition-all duration-300 bg-white/5 rounded-xl px-3 py-1 gap-3">
+                    <AvatarUser :user="article.user" />
+                    <p class="text-white/60 text-sm font-normal">{{ article.user.name }}</p>
+                    </Link>
+                </div>
+                <!-- <div class="flex flex-col gap-4">
+                    <div class="py-4 px-5 bg-white/5 flex items-center gap-3 rounded-xl">
+                        <input type="text"
+                            class="w-full bg-transparent outline-none text-white/60 placeholder:text-white/40"
+                            placeholder="Напишите комментарий...">
+                        <button class="btn btn-secondary py-1.5">Отправить</button>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div v-for="i in 5" class="py-4 px-5 bg-white/5 relative pt-8 flex items-start gap-2 rounded-xl">
+                            <div class="p-1 bg-body absolute -top-3.5 left-4.5 rounded-lg">
+                                <div class="bg-white/10 rounded-lg px-2 py-1 flex items-center gap-2 ">
+                                    <AvatarUser :user="article.user" />
+                                    <p class="text-white/60 text-sm font-normal">{{ article.user.name }}</p>
+                                </div>
+                            </div>
+                            <div class="text-white/60 text-sm font-normal">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>

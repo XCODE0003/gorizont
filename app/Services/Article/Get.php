@@ -13,6 +13,7 @@ class Get
         if (!$article) {
             return null;
         }
+        $author = $article->user;
 
         $isLiked = auth()->check() ? 
             $article->likes()->where('user_id', auth()->user()->id)->exists() : 
@@ -25,7 +26,8 @@ class Get
         return [
             'article' => $article,
             'isLiked' => $isLiked, 
-            'comments' => $comments
+            'comments' => $comments,
+            'author' => $author
         ];
     }
 }
