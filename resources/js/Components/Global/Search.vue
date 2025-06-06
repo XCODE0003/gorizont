@@ -35,9 +35,9 @@ function handleSearch() {
         </div>
         <transition name="fade">
             <div v-if="focused" class="absolute z-50 top-14 left-0 w-full h-fit-content bg-primary rounded-2xl py-3 px-4 ">
-            <div class="flex flex-col gap-2">
-                <Link :href="`/post/${item.id}`" v-if="searchStore.articles.length > 0 && search.length > 0" v-for="item in searchStore.articles"
-                    class="w-full hover:bg-white/10 max-w-[500px] truncate transition-all duration-300 cursor-pointer rounded-2xl py-3 px-4">
+            <div class="flex flex-col gap-2 w-full">
+                <Link :href="`/post/view/${item.id}`" v-if="searchStore.articles.length > 0 && search.length > 0" v-for="item in searchStore.articles"
+                    class="w-full hover:bg-white/10 flex-1 max-w-[500px] truncate transition-all duration-300 cursor-pointer rounded-2xl py-3 px-4">
                     {{ item.title }}
                 </Link>
                 <div v-else class="w-full text-center text-white/40">

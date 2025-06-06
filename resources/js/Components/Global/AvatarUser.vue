@@ -14,12 +14,12 @@ const props = defineProps({
 <template>
 
     <div v-if="user?.avatar === null"
-        class="flex h-10 w-10 select-none rounded-full bg-white/10 flex-shrink-0 items-center justify-center">
+        class="bg-black/0 dark:bg-white/10 flex items-center justify-center flex-shrink-0 w-6 h-6 text-xs rounded-full select-none">
         <span class="text-white">{{
             user?.name?.charAt(0)
         }}</span>
     </div>
     <div v-else>
-        <img :src="user?.avatar" alt="avatar" class="w-6 h-6 flex-shrink-0 object-cover rounded-full" />
+        <img :src="user?.avatar" alt="avatar" class="flex-shrink-0 object-cover w-6 h-6 rounded-full" />
     </div>
 </template>

@@ -22,7 +22,7 @@ const toggleMenu = () => {
 
 <template>
     <header>
-        <div class="container mx-auto py-8 gap-10 flex justify-between items-center">
+        <div class="container max-sm:px-4 mx-auto py-8 gap-10 flex justify-between items-center">
             <Link href="/" class="flex items-center gap-2">
             <img src="/assets/images/project/logo.svg" alt="logo" class="w-8 h-8" />
             <h1 class="text-2xl font-bold">Gorizont</h1>

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Articles extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'title',
         'content',
@@ -13,7 +15,7 @@ class Articles extends Model
         'user_id',
         'category_id',
         'comment',
-        
+
     ];
 
     public function user()

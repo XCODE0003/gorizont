@@ -16,3 +16,4 @@ require __DIR__ . '/api.php';
 require __DIR__ . '/profile.php';
 require __DIR__ . '/post.php';
 require __DIR__ . '/settings.php';
+require __DIR__ . '/comment.php';

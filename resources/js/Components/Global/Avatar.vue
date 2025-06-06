@@ -2,6 +2,13 @@
 import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore();
+
+// Пример стилей для переноса текста, которые можно применить к компоненту с контентом статьи
+const textWrapStyles = {
+  'white-space': 'pre-wrap',
+  'word-wrap': 'break-word',
+  'overflow-wrap': 'break-word'
+};
 </script>
 
 <template>

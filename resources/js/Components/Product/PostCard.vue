@@ -32,30 +32,30 @@ defineProps({
 })
 function cleanDescription(description) {
   if (!description) return '';
-  
+
   const textarea = document.createElement('textarea');
   textarea.innerHTML = description;
   let decodedText = textarea.value;
-  
+
   decodedText = decodedText.replace(/<[^>]*>/g, '');
-  
+
   decodedText = decodedText.replace(/&nbsp;/g, ' ');
-  decodedText = decodedText.replace(/\u00A0/g, ' '); 
-  
+  decodedText = decodedText.replace(/\u00A0/g, ' ');
+
   decodedText = decodedText.replace(/&[a-zA-Z0-9#]+;/g, '');
-  
+
   decodedText = decodedText.replace(/\s+/g, ' ').trim();
-  
+
   return decodedText;
 }
 </script>
 
 <template>
     <Link :href="'/post/view/' + id" class="post-card">
-        <img :src="'/storage/' + image" alt="image" class="w-full h-44 object-cover">
-        <div class="flex flex-col gap-2 py-4 px-2">
+        <img :src="'/storage/' + image" alt="image" class="h-44 object-cover w-full">
+        <div class="flex flex-col gap-2 px-2 py-4">
             <p class="title-truncate font-bold">{{ title }}</p>
-            <p  class="leading-none text-white/60 font-normal title-truncate ">{{ cleanDescription(description) }}</p>
+            <p  class="text-white/60 title-truncate  font-normal leading-none">{{ cleanDescription(description) }}</p>
         </div>
     </Link>
 </template>
@@ -63,7 +63,7 @@ function cleanDescription(description) {
 <style scoped>
 
 .post-card {
-    @apply flex flex-col  rounded-xl border border-white/10 overflow-hidden hover:opacity-80 transition-all duration-300 cursor-pointer  ; 
+    @apply flex flex-col  rounded-xl border border-white/10 overflow-hidden hover:opacity-80 transition-all duration-300 cursor-pointer  ;
 }
 
 .title-truncate {

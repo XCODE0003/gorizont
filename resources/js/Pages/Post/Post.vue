@@ -28,9 +28,37 @@ const props = defineProps({
         required: true
     }
 });
+const comments = ref(props.comments);
+const comment = ref('');
+
+const handleComment = () => {
+    if(!comment.value) {
+        toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Комментарий не может быть пустым' });
+        return;
+    }
+    axios.post(`/comment/new`, {
+        post_id: props.article.id,
+        comment: comment.value
+    })
+    .then(response => {
+        toast.add({ severity: 'success', summary: 'Успешно', detail: 'Комментарий добавлен' });
+        comment.value = '';
+        comments.value.unshift(response.data.comment);
+    })
+    .catch(error => {
+        toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось добавить комментарий' });
+    });
+}
 
 const isLiked = ref(props.isLiked);
 
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
 
 function like() {
     axios.post(`/post/${props.article.id}/like`)
@@ -46,16 +74,18 @@ function like() {
 
 <template>
     <MainLayout>
-        <div class="max-w-2xl w-full mx-auto pb-20 ">
-            <div class="flex  flex-col gap-4">
-                <img :src="'/storage/' + article.image" alt="image" class="w-full h-64 object-cover rounded-lg">
+        <div class=" w-full max-w-2xl pb-20 mx-auto">
+            <div class="flex flex-col gap-4">
+                <img :src="'/storage/' + article.image" alt="image" class="object-cover w-full h-64 rounded-lg">
                 <h1 class="text-2xl font-bold text-center">{{ article.title }}</h1>
-                <div class="text-white/60 font-normal text-wrapper" v-html="article.content"></div>
+                <div class="text-white/60 text-wrapper text-wrap overflow-hidden font-normal break-words whitespace-normal"
+                     style="white-space: pre-wrap; word-break: break-word; max-width: 100%;"
+                     v-html="article.content"></div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <button @click="like" v-if="userStore.user && userStore.user.id !== article.user_id"
                             :class="{ 'text-white': isLiked, 'text-white/30': !isLiked }"
-                            class=" btn hover:bg-white/10  hover:text-white transition-all duration-300">
+                            class=" btn hover:bg-white/10 hover:text-white transition-all duration-300">
                             <svg viewBox="0 -0.5 21 21" version="1.1" class="size-5" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -78,42 +108,43 @@ function like() {
                         </button>
                     </div>
                     <Link :href="`/profile/${article.user.id}`"
-                        class="flex items-center hover:bg-white/10 transition-all duration-300 bg-white/5 rounded-xl px-3 py-1 gap-3">
+                        class="hover:bg-white/10 bg-white/5 rounded-xl flex items-center gap-3 px-3 py-1 transition-all duration-300">
                     <AvatarUser :user="article.user" />
                     <p class="text-white/60 text-sm font-normal">{{ article.user.name }}</p>
                     </Link>
                 </div>
-                <!-- <div class="flex flex-col gap-4">
-                    <div class="py-4 px-5 bg-white/5 flex items-center gap-3 rounded-xl">
+                <div v-if="article.comment" class="flex flex-col gap-4">
+                    <div class="bg-white/5 rounded-xl flex items-center gap-3 px-5 py-4">
                         <input type="text"
-                            class="w-full bg-transparent outline-none text-white/60 placeholder:text-white/40"
-                            placeholder="Напишите комментарий...">
-                        <button class="btn btn-secondary py-1.5">Отправить</button>
+                            class="text-white/60 placeholder:text-white/40 w-full bg-transparent outline-none"
+                            placeholder="Напишите комментарий..." v-model="comment">
+                        <button @click="handleComment" class="btn btn-secondary py-1.5">Отправить</button>
                     </div>
                     <div class="flex flex-col gap-4">
-                        <div v-for="i in 5" class="py-4 px-5 bg-white/5 relative pt-8 flex items-start gap-2 rounded-xl">
+                        <div v-for="comment in comments" class="bg-white/5 rounded-xl text-wrap relative flex flex-col gap-2 px-5 py-4 pt-8 break-words">
                             <div class="p-1 bg-body absolute -top-3.5 left-4.5 rounded-lg">
-                                <div class="bg-white/10 rounded-lg px-2 py-1 flex items-center gap-2 ">
-                                    <AvatarUser :user="article.user" />
-                                    <p class="text-white/60 text-sm font-normal">{{ article.user.name }}</p>
+                                <div class="bg-white/10 flex items-center gap-2 px-2 py-1 rounded-lg">
+                                    <AvatarUser :user="comment.user" />
+                                    <p class="text-white/60 text-sm font-normal">{{ comment.user.name }}</p>
                                 </div>
                             </div>
-                            <div class="text-white/60 text-sm font-normal">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                            <div class="text-white/60 text-wrap text-sm font-normal whitespace-pre-wrap">
+                                {{ comment.comment }}
+                            </div>
+                            <div class="p-1 bg-body absolute -top-3.5 right-1 rounded-md">
+                                <div class="bg-white/10 flex items-center gap-2 px-2 py-1 text-xs rounded-md">
+                                    {{ comment.created_at }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
 
         </div>
-        <div class="fixed bottom-6 right-6">
+        <div class="bottom-6 right-6 fixed">
             <Link :href="`/post/${article.id}/edit`" v-if="article?.user_id === userStore?.user?.id"
-                class="h-12 w-12 btn btn-primary rounded-full flex items-center justify-center shadow-lg">
+                class="btn btn-primary flex items-center justify-center w-12 h-12 rounded-full shadow-lg">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="white" class="size-5 flex-shrink-0">

@@ -9,23 +9,23 @@ class Get
     public function execute($id)
     {
         $article = Articles::find($id);
-        
+
         if (!$article) {
             return null;
         }
         $author = $article->user;
 
-        $isLiked = auth()->check() ? 
-            $article->likes()->where('user_id', auth()->user()->id)->exists() : 
+        $isLiked = auth()->check() ?
+            $article->likes()->where('user_id', auth()->user()->id)->exists() :
             false;
 
-        $comments = $article->comments()->get();
+        $comments = $article->comments()->with('user')->get();
         $likesCount = $article->likesCount();
         $article->likesCount = $likesCount;
 
         return [
             'article' => $article,
-            'isLiked' => $isLiked, 
+            'isLiked' => $isLiked,
             'comments' => $comments,
             'author' => $author
         ];

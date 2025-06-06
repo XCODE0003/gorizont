@@ -17,5 +17,8 @@ class Comment extends Model
     {
         return $this->belongsTo(Articles::class);
     }
-    
+
+    protected $casts = [
+        'created_at' => 'datetime:d.m.Y H:i',
+    ];
 }

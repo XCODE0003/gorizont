@@ -39,15 +39,15 @@ onMounted(() => {
 const handleSubmit = async () => {
     errors.value = {};
     loading.value = true;
-    
+
     try {
         const formData = new FormData();
-        
+
         // Отправляем имя только если оно не пустое
         if (name.value?.trim()) {
             formData.append('name', name.value.trim());
         }
-        
+
         // Отправляем файл только если он был выбран
         if (file?.value instanceof File) {
             formData.append('avatar', file.value);
@@ -76,12 +76,12 @@ const handleSubmit = async () => {
             <div class="flex items-center gap-2 w-full">
                 <div class="flex flex-col w-full">
                     <div class="input-wrapper-border flex-1">
-                        <input 
-                            type="text" 
-                            class="input" 
+                        <input
+                            type="text"
+                            class="input"
                             :class="{ 'border-red-500': errors.name }"
-                            placeholder="Имя" 
-                            v-model="name" 
+                            placeholder="Имя"
+                            v-model="name"
                         />
                     </div>
                     <span v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name[0] }}</span>
@@ -107,8 +107,8 @@ const handleSubmit = async () => {
                 </div>
             </div>
             <div v-if="errors.avatar" class="text-red-500 text-sm">{{ errors.avatar[0] }}</div>
-            <button 
-                @click="handleSubmit" 
+            <button
+                @click="handleSubmit"
                 class="btn btn-secondary"
                 :disabled="loading"
             >

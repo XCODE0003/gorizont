@@ -12,7 +12,7 @@ export default {
     important: true,
     theme: {
         extend: {
-        
+
            screens: {
             'sm': '640px',
             'md': '768px',
@@ -24,9 +24,9 @@ export default {
             'body': '#18181A',
             'red': '#d42222',
 
-        } 
+        }
         },
-     
+
     },
 
 };

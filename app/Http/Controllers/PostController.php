@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Articles;
 use App\Models\Like;
+use App\Models\Comment;
 use App\Services\Article\Get as GetService;
 class PostController extends Controller
 {
@@ -20,6 +21,7 @@ class PostController extends Controller
         $isLiked = $article['isLiked'];
         $comments = $article['comments'];
         $article = $article['article'];
+
         return Inertia::render('Post/Post', ['article' => $article, 'isLiked' => $isLiked, 'comments' => $comments]);
     }
 
@@ -85,38 +87,21 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'title' => 'required|string|max:255',
-                'content' => 'required|string',
-                'category_id' => 'required|exists:categories,id',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'comment' => 'required|boolean',
-            ],
-            [
-                'title.required' => 'Поле название обязательно для заполнения',
-                'title.string' => 'Поле название должно быть строкой',
-                'title.max' => 'Поле название не должно превышать 255 символов',
-                'content.required' => 'Поле содержание обязательно для заполнения',
-                'content.string' => 'Поле содержание должно быть строкой',
-                'category_id.required' => 'Поле категория обязательно для заполнения',
-                'category_id.exists' => 'Категория не найдена',
-                'image.required' => 'Поле изображение обязательно для заполнения',
-                'image.image' => 'Поле изображение должно быть изображением',
-                'image.mimes' => 'Поле изображение должно быть изображением',
-
-            ]
-        );
-        $article = Articles::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'category_id' => $request->category_id,
-            'image' => $request->hasFile('image') ? $request->file('image')->store('images', 'public') : null,
+        $request->validate([
+            'comment' => 'required|string',
+        ]);
+        $post = Articles::find($request->post_id);
+        if (!$post) {
+            return response()->json(['message' => 'Статья не найдена']);
+        }
+        $comment = Comment::create([
             'comment' => $request->comment,
             'user_id' => auth()->user()->id,
+            'article_id' => $post->id,
         ]);
+        $comment->load('user');
 
-        return response()->json(['message' => 'Статья успешно создана', 'article' => $article]);
+        return response()->json(['message' => 'Комментарий успешно создан', 'comment' => $comment]);
     }
 
     public function search(Request $request)

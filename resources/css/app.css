@@ -28,10 +28,10 @@ body {
     @apply flex items-center gap-2 px-6 py-3 bg-primary  rounded-xl w-full;
 }
 .btn-big{
-    @apply px-5 py-4 rounded-2xl justify-center flex items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80; 
+    @apply px-5 py-4 rounded-2xl justify-center flex items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80;
 }
 .btn{
-    @apply px-5 py-2 rounded-xl flex justify-center items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80; 
+    @apply px-5 py-2 rounded-xl flex justify-center items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80;
 }
 .btn-primary{
     @apply bg-primary text-white;
