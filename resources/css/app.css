@@ -2,58 +2,171 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
+/* CSS переменные для тем */
+:root {
     --p-scrollbar-width: 0px !important;
 }
-.p-select-option.p-select-option-selected.p-focus{
-    background: #29292B !important;
+
+/* Темная тема (по умолчанию) */
+:root.dark,
+:root {
+    --bg-theme: #18181A;
+    --bg-theme-primary: #29292B;
+    --bg-theme-secondary: #3a3a3c;
+    --text-theme: #ffffff;
+    --text-theme-secondary: rgba(255, 255, 255, 0.6);
+    --text-theme-muted: rgba(255, 255, 255, 0.4);
+    --border-theme: rgba(255, 255, 255, 0.2);
+    --hover-theme: rgba(255, 255, 255, 0.1);
+    --btn-primary-bg: #ffffff;
+    --btn-primary-text: #000000;
+    --btn-secondary-bg: #3a3a3c;
+    --btn-secondary-text: #ffffff;
 }
-.p-select-option.p-select-option-selected{
-    background: #29292B !important;
+
+/* Светлая тема */
+:root.light {
+    --bg-theme: #ffffff;
+    --bg-theme-primary: #ffffff;
+    --bg-theme-secondary: #f8f9fa;
+    --text-theme: #1f2937;
+    --text-theme-secondary: #6b7280;
+    --text-theme-muted: #9ca3af;
+    --border-theme: #e5e7eb;
+    --hover-theme: #f3f4f6;
+    --btn-primary-bg: #29292B;
+    --btn-primary-text: #ffffff;
+    --btn-secondary-bg: #f3f4f6;
+    --btn-secondary-text: #1f2937;
 }
-.text-wrapper img{
+
+/* PrimeVue overrides */
+.p-select-option.p-select-option-selected.p-focus {
+    background: var(--bg-theme-primary) !important;
+}
+.p-select-option.p-select-option-selected {
+    background: var(--bg-theme-primary) !important;
+}
+
+.text-wrapper img {
     @apply rounded-xl;
 }
+
 body {
     font-family: "Inter", serif;
-    background-color: #18181A;
-    color: #fff;
+    background-color: var(--bg-theme);
+    color: var(--text-theme);
     @apply font-bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.input-wrapper-border{
-    @apply flex items-center gap-2 px-6  bg-primary  rounded-xl w-full py-3 bg-transparent border border-white/20 ;
-}
-.input-wrapper{
-    @apply flex items-center gap-2 px-6 py-3 bg-primary  rounded-xl w-full;
-}
-.btn-big{
-    @apply px-5 py-4 rounded-2xl justify-center flex items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80;
-}
-.btn{
-    @apply px-5 py-2 rounded-xl flex justify-center items-center gap-2 cursor-pointer transition-all duration-300 hover:opacity-80;
-}
-.btn-primary{
-    @apply bg-primary text-white;
-}
-.btn-secondary{
-    @apply bg-white text-black;
-}
-.btn-danger{
-    @apply bg-red text-white;
+@layer components {
+    /* Адаптивные компоненты */
+    .input-wrapper-border {
+        @apply rounded-xl flex items-center w-full gap-2 px-6 py-3 transition-all duration-300;
+        background-color: var(--bg-theme-primary);
+        border: 1px solid var(--border-theme);
+        color: var(--text-theme);
+    }
+
+    .input-wrapper {
+        @apply rounded-xl flex items-center w-full gap-2 px-6 py-3 transition-all duration-300;
+        background-color: var(--bg-theme-primary);
+        color: var(--text-theme);
+    }
+
+    .btn-big {
+        @apply rounded-2xl hover:opacity-80 flex items-center justify-center gap-2 px-5 py-4 transition-all duration-300 cursor-pointer;
+    }
+
+    .btn {
+        @apply rounded-xl hover:opacity-80 flex items-center justify-center gap-2 px-5 py-2 transition-all duration-300 cursor-pointer;
+    }
+
+    .btn-primary {
+        background-color: var(--btn-primary-bg);
+        color: var(--btn-primary-text);
+    }
+
+    .btn-secondary {
+        background-color: var(--btn-secondary-bg);
+        color: var(--btn-secondary-text);
+    }
+
+    .btn-danger {
+        @apply bg-red text-white;
+    }
+
+
 }
 
-input{
+@layer utilities {
+    /* Утилитарные классы для тем */
+    .bg-theme {
+        background-color: var(--bg-theme) !important;
+    }
+
+    .bg-theme-primary {
+        background-color: var(--bg-theme-primary) !important;
+    }
+
+    .bg-theme-secondary {
+        background-color: var(--bg-theme-secondary) !important;
+    }
+
+    .text-theme {
+        color: var(--text-theme) !important;
+    }
+
+    .text-theme-secondary {
+        color: var(--text-theme-secondary) !important;
+    }
+
+    .text-theme-muted {
+        color: var(--text-theme-muted) !important;
+    }
+
+    .border-theme {
+        border-color: var(--border-theme) !important;
+    }
+
+    .hover-theme:hover {
+        background-color: var(--hover-theme) !important;
+    }
+}
+
+input {
     background-color: transparent;
     border: none;
     outline: none;
     padding: 0;
-    @apply text-white font-normal ;
+    color: var(--text-theme);
+    @apply font-normal;
 }
 
-.tab_item.active{
-    @apply bg-white text-black hover:bg-white;
+input::placeholder {
+    color: var(--text-theme-muted);
 }
-.tab_item{
-    @apply p-2 w-full text-center rounded-lg  transition-all duration-300 hover:bg-primary cursor-pointer;
+
+/* Темная тема - специфичные стили */
+.dark .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Светлая тема - специфичные стили */
+.light .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.light input {
+    color: var(--text-theme);
+}
+
+.light svg {
+    transition: all 0.3s ease;
+}
+
+/* Анимации для смены темы */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

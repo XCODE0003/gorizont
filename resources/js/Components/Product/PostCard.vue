@@ -1,5 +1,9 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { useThemeStore } from '@/stores/themeStore';
+
+const themeStore = useThemeStore();
+
 defineProps({
     id: {
         type: Number,
@@ -30,6 +34,7 @@ defineProps({
         required: true
     }
 })
+
 function cleanDescription(description) {
   if (!description) return '';
 
@@ -54,25 +59,31 @@ function cleanDescription(description) {
     <Link :href="'/post/view/' + id" class="post-card">
         <img :src="'/storage/' + image" alt="image" class="h-44 object-cover w-full">
         <div class="flex flex-col gap-2 px-2 py-4">
-            <p class="title-truncate font-bold">{{ title }}</p>
-            <p  class="text-white/60 title-truncate  font-normal leading-none">{{ cleanDescription(description) }}</p>
+            <p class="title-truncate font-bold text-theme">{{ title }}</p>
+            <p class="text-theme-secondary title-truncate font-normal leading-none">{{ cleanDescription(description) }}</p>
         </div>
     </Link>
 </template>
 
 <style scoped>
-
 .post-card {
-    @apply flex flex-col  rounded-xl border border-white/10 overflow-hidden hover:opacity-80 transition-all duration-300 cursor-pointer  ;
+    @apply flex flex-col rounded-xl overflow-hidden transition-all duration-300 cursor-pointer;
+    background-color: var(--bg-theme-primary);
+    border: 1px solid var(--border-theme);
+}
+
+.post-card:hover {
+    opacity: 0.8;
+    background-color: var(--hover-theme);
 }
 
 .title-truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  display: block;
-  font-weight: bold;
-  line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+    font-weight: bold;
+    line-height: 1;
 }
 </style>
