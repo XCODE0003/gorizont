@@ -10,16 +10,16 @@ class Subscribe extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function subscribe()
+    public function subscribedTo()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'subscribe_id');
     }
 
-    public function isSubscribed(User $user)
+    public static function isSubscribed($userId, $subscribeId)
     {
-        return $this->where('user_id', $user->id)->where('subscribe_id', $this->id)->exists();
+        return self::where('user_id', $userId)->where('subscribe_id', $subscribeId)->exists();
     }
 }

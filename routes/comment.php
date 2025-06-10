@@ -18,9 +18,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'comment'], function () {
         Route::get('/new', [CommentController::class, 'new'])->name('comment.new');
-        Route::post('/new', [PostController::class, 'store'])->name('post.store');
+        Route::post('/new', [PostController::class, 'storeComment'])->name('comment.store');
 
     });
 
-   
+
 });

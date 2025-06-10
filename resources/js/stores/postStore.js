@@ -42,11 +42,11 @@ export const usePostStore = defineStore('post', {
                 formData.append('content', this.content);
                 formData.append('category_id', this.category.id);
                 formData.append('comment', this.comments ? 1 : 0);
-                
+
                 if (this.image) {
                     formData.append('image', this.image);
                 }
-                
+
                 const response = await axios.post('/post/'+id+'/edit', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -66,21 +66,21 @@ export const usePostStore = defineStore('post', {
                 formData.append('content', this.content);
                 formData.append('category_id', this.category.id);
                 formData.append('comment', this.comments ? 1 : 0);
-                
+
                 if (this.image) {
                     formData.append('image', this.image);
                 }
-                
+
                 const response = await axios.post('/post/new', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                
+
                 if(response.status === 200) {
                     this.toast.add({ severity: 'success', summary: 'Успешно', detail: 'Статья успешно создана', life: 3000 });
                     console.log(response.data);
-                    router.visit('/post/'+response.data.article.id);
+                    router.visit('/post/view/'+response.data.article.id);
                 }
             } catch(error) {
                 console.log(error);
@@ -101,4 +101,4 @@ export const usePostStore = defineStore('post', {
             }
         }
     }
-}); 
+});

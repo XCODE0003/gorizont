@@ -3,11 +3,9 @@ import Dialog from 'primevue/dialog';
 import MainLayout from '../../Layouts/MainLayout.vue';
 import PostCard from '../../Components/Product/PostCard.vue';
 import { ref } from "vue";
-import ToggleSwitch from 'primevue/toggleswitch';
 import { usePostStore } from '../../stores/postStore';
 import { useThemeStore } from '../../stores/themeStore';
 import Editor from 'primevue/editor';
-import FileUpload from 'primevue/fileupload';
 import Select from 'primevue/select';
 import { onMounted } from 'vue';
 import NewCategoryModal from '../../Components/Modal/NewCategoryModal.vue';
@@ -25,7 +23,9 @@ onMounted(async () => {
 });
 
 function onFileSelect(event) {
-    const file = event.files[0];
+    const file = event.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
 
     reader.onload = async (e) => {
@@ -102,15 +102,15 @@ function onFileSelect(event) {
                                 <p>Нажмите для загрузки изображения</p>
                                 <span>JPG, PNG до 5MB</span>
                             </div>
-                            <FileUpload
-                                mode="basic"
-                                @select="onFileSelect"
-                                customUpload
-                                auto
-                                severity="secondary"
-                                class="file-upload-btn"
-                                :chooseLabel="src ? 'Изменить обложку' : 'Выбрать изображение'"
+                            <input
+                                type="file"
+                                @change="onFileSelect"
+                                accept="image/*"
+                                class="file-input"
                             />
+                            <button type="button" class="file-upload-btn">
+                                {{ src ? 'Изменить обложку' : 'Выбрать изображение' }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -154,14 +154,19 @@ function onFileSelect(event) {
 
                 <!-- Настройки комментариев -->
                 <div class="form-group">
-                    <div class="toggle-wrapper">
-                        <div class="toggle-content">
-                            <div class="toggle-info">
-                                <h4 class="toggle-title">Комментарии</h4>
-                                <p class="toggle-description">Разрешить читателям оставлять комментарии к статье</p>
+                    <div class="checkbox-wrapper">
+                        <label class="checkbox-label">
+                            <input
+                                type="checkbox"
+                                v-model="postStore.comments"
+                                class="checkbox-input"
+                            />
+                            <div class="checkbox-custom"></div>
+                            <div class="checkbox-content">
+                                <h4 class="checkbox-title">Комментарии</h4>
+                                <p class="checkbox-description">Разрешить читателям оставлять комментарии к статье</p>
                             </div>
-                            <ToggleSwitch v-model="postStore.comments" class="enhanced-toggle" />
-                        </div>
+                        </label>
                     </div>
                 </div>
 
@@ -277,8 +282,18 @@ function onFileSelect(event) {
     @apply text-xs;
 }
 
+.file-input {
+    @apply absolute inset-0 opacity-0 cursor-pointer z-10;
+}
+
 .file-upload-btn {
-    @apply absolute inset-0;
+    @apply absolute bottom-4 right-4 px-4 py-2 text-sm rounded-lg transition-all duration-200;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+.file-upload-btn:hover {
+    opacity: 0.8;
 }
 
 .select-wrapper {
@@ -293,35 +308,55 @@ function onFileSelect(event) {
 
 .add-category-btn {
     @apply flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200;
-    background-color: #3b82f6;
-    color: white;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
 }
 
 .add-category-btn:hover {
-    background-color: #2563eb;
     transform: translateY(-1px);
+    opacity: 0.8;
 }
 
-.toggle-wrapper {
+.checkbox-wrapper {
     @apply p-4 rounded-xl border;
     background-color: var(--bg-theme-secondary);
     border-color: var(--border-theme);
 }
 
-.toggle-content {
-    @apply flex items-center justify-between;
+.checkbox-label {
+    @apply flex items-start gap-3 cursor-pointer;
 }
 
-.toggle-info {
+.checkbox-input {
+    @apply sr-only;
+}
+
+.checkbox-custom {
+    @apply w-5 h-5 border-2 rounded transition-all duration-200 flex-shrink-0 mt-0.5;
+    border-color: var(--border-theme);
+    background-color: var(--bg-theme);
+}
+
+.checkbox-input:checked + .checkbox-custom {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+    content: '✓';
+    @apply text-white text-xs flex items-center justify-center w-full h-full;
+}
+
+.checkbox-content {
     @apply flex-1;
 }
 
-.toggle-title {
+.checkbox-title {
     @apply font-semibold mb-1;
     color: var(--text-theme);
 }
 
-.toggle-description {
+.checkbox-description {
     @apply text-sm;
     color: var(--text-theme-secondary);
 }
@@ -332,14 +367,13 @@ function onFileSelect(event) {
 
 .publish-btn {
     @apply w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-200;
-    background-color: #10b981;
-    color: white;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
 }
 
 .publish-btn:hover {
-    background-color: #059669;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3);
+    opacity: 0.8;
 }
 
 /* PrimeVue стилизация */
@@ -395,26 +429,7 @@ function onFileSelect(event) {
     background-color: var(--hover-theme) !important;
 }
 
-:deep(.p-fileupload-choose) {
-    background-color: #3b82f6 !important;
-    border: none !important;
-    border-radius: 0.5rem !important;
-    color: white !important;
-    font-weight: 500 !important;
-}
 
-:deep(.p-fileupload-choose:hover) {
-    background-color: #2563eb !important;
-}
-
-:deep(.p-toggleswitch) {
-    width: 3rem !important;
-    height: 1.75rem !important;
-}
-
-:deep(.p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider) {
-    background-color: #10b981 !important;
-}
 
 :deep(.p-dialog) {
     background-color: var(--bg-theme-primary) !important;

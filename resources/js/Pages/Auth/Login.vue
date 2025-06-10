@@ -117,11 +117,13 @@ const handleLogin = () => {
 
 <style scoped>
 .auth-container {
-    @apply flex items-start justify-center min-h-screen w-full p-4;
+    @apply flex items-center justify-center min-h-screen w-full p-4;
     background-color: var(--bg-theme);
+    margin-top: -80px;
+    padding-top: 80px;
 }
 .auth-card {
-    @apply w-full max-w-xl space-y-6 p-8 rounded-2xl shadow-lg mx-auto;
+    @apply w-full max-w-sm sm:max-w-md lg:max-w-xl space-y-4 sm:space-y-6 p-6 sm:p-8 rounded-2xl shadow-lg mx-auto;
     background-color: var(--bg-theme-primary);
     border: 1px solid var(--border-theme);
 }

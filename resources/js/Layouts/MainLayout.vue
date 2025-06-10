@@ -14,7 +14,7 @@ onMounted(() => {
 <template>
     <div class="min-h-screen bg-theme transition-all duration-300">
         <Header />
-        <div class="flex gap-2 page-wrapper">
+        <div class="page-wrapper px-2 sm:px-4 md:px-6">
             <slot />
         </div>
         <Toast />

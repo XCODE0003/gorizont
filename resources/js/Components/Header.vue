@@ -18,17 +18,22 @@ onMounted(async () => {
 });
 
 const isShowMenu = ref(false);
+const isShowMobileSearch = ref(false);
 
 const toggleMenu = () => {
     isShowMenu.value = !isShowMenu.value;
 };
+
+const toggleMobileSearch = () => {
+    isShowMobileSearch.value = !isShowMobileSearch.value;
+};
 </script>
 
 <template>
-    <header class="bg-theme ">
-        <div class="max-sm:px-4 container flex items-center justify-between gap-10 py-8 mx-auto">
-            <Link href="/" class="logo-link rounded-xl flex items-center gap-2 px-3 py-2 transition-all duration-300">
-                <svg width="32" height="32" viewBox="0 0 72 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+    <header class="bg-theme relative">
+        <div class="container flex items-center justify-between gap-2 sm:gap-4 md:gap-10 py-4 sm:py-6 md:py-8 mx-auto px-4 sm:px-6">
+            <Link href="/" class="logo-link rounded-xl flex items-center gap-2 px-2 sm:px-3 py-2 transition-all duration-300">
+                <svg width="24" height="24" viewBox="0 0 72 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 sm:w-8 sm:h-8">
                     <path d="M32.0028 24.6869L30.1557 3.76687C30.1557 1.69881 32.5742 0 35.6163 0C38.6637 0 41.0861 1.69881 41.0861 3.76687L39.2345 24.6869C39.0264 25.9469 37.4873 26.9194 35.6142 26.9194C33.7479 26.9194 32.207 25.9469 32.0028 24.6869Z" :fill="themeStore.isDarkTheme ? '#ffffff' : '#1f2937'"/>
                     <path d="M24.3063 33.4495C25.2422 31.8265 25.1702 30.0113 24.181 29.2029L6.98515 17.1429C5.19918 16.1083 2.51649 17.3537 0.994998 19.9916C-0.531271 22.6265 -0.260524 25.571 1.52515 26.6038L20.5631 35.4692C21.7553 35.9125 23.372 35.0695 24.3063 33.4495Z" :fill="themeStore.isDarkTheme ? '#ffffff' : '#1f2937'"/>
                     <path d="M46.9299 33.4495C47.8655 35.0704 49.4792 35.9125 50.6708 35.4692L69.712 26.6038C71.5052 25.571 71.7625 22.6265 70.247 19.9916C68.7183 17.3537 66.0329 16.1083 64.2499 17.1429L47.0541 29.2029C46.0705 30.0113 45.9944 31.8289 46.9299 33.4495Z" :fill="themeStore.isDarkTheme ? '#ffffff' : '#1f2937'"/>
@@ -36,23 +41,33 @@ const toggleMenu = () => {
                     <path d="M47.0541 50.7719L64.2499 62.8227C66.0329 63.8543 68.7183 62.6045 70.2469 59.9752C71.7625 57.3379 71.5051 54.3916 69.712 53.3543L50.6708 44.4994C49.4792 44.0505 47.8675 44.8922 46.9299 46.5149C45.9944 48.134 46.0705 49.954 47.0541 50.7719Z" :fill="themeStore.isDarkTheme ? '#ffffff' : '#1f2937'"/>
                     <path d="M20.5631 44.4997L1.52515 53.3546C-0.260524 54.3919 -0.531271 57.3382 0.994998 59.9755C2.51649 62.6045 5.19918 63.8546 6.98515 62.823L24.181 50.7722C25.1702 49.954 25.2419 48.1373 24.3069 46.5152C23.3714 44.8922 21.7553 44.0507 20.5631 44.4997Z" :fill="themeStore.isDarkTheme ? '#ffffff' : '#1f2937'"/>
                 </svg>
-                <h1 class="text-theme text-2xl font-bold">Gorizont</h1>
+                <h1 class="text-theme text-lg sm:text-xl md:text-2xl font-bold hidden sm:block">Gorizont</h1>
             </Link>
 
-            <Search />
+            <!-- Десктопный поиск -->
+            <div class="hidden md:block flex-1 max-w-lg">
+                <Search />
+            </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Кнопка мобильного поиска -->
+                <button @click="toggleMobileSearch" class="md:hidden p-2 rounded-lg transition-all duration-200 hover:bg-hover-theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-theme">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </button>
+
                 <!-- Переключатель тем -->
                 <ThemeToggle />
 
                 <!-- Пользовательское меню или кнопка входа -->
                 <div v-if="authStore.user" @click="toggleMenu"
-                    class="user-menu relative flex items-center gap-4 p-1 transition-all duration-300 rounded-full cursor-pointer">
+                    class="user-menu relative flex items-center gap-2 sm:gap-4 p-1 transition-all duration-300 rounded-full cursor-pointer">
                     <Avatar />
                     <transition name="fade">
-                        <div v-if="isShowMenu" class="top-14 bg-theme-primary border-theme rounded-2xl w-60 absolute right-0 z-50 px-4 py-3 border shadow-md">
+                        <div v-if="isShowMenu" class="top-12 sm:top-14 bg-theme-primary border-theme rounded-2xl w-60 absolute right-0 z-50 px-4 py-3 border shadow-md">
                             <div class="flex flex-col items-start gap-1">
-                                <div class=" w-full py-1">
+                                <div class="w-full py-1">
                                     <div class="link_item">
                                         <Avatar />
                                         <div class="flex flex-col items-start gap-1">
@@ -91,9 +106,25 @@ const toggleMenu = () => {
                         </div>
                     </transition>
                 </div>
-                <Link v-else href="/login" class="btn btn-primary">Войти</Link>
+                <Link v-else href="/login" class="btn btn-primary text-sm sm:text-base px-3 sm:px-5">Войти</Link>
             </div>
         </div>
+
+        <!-- Мобильное меню поиска -->
+        <transition name="search-slide">
+            <div v-if="isShowMobileSearch" class="md:hidden absolute top-full left-0 right-0 bg-theme border-b border-theme px-4 py-4 z-50 shadow-lg">
+                <div class="flex items-center gap-3">
+                    <div class="flex-1">
+                        <Search />
+                    </div>
+                    <button @click="toggleMobileSearch" class="p-2 rounded-lg transition-all duration-200 hover:bg-hover-theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-theme">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </transition>
     </header>
 </template>
 
@@ -106,6 +137,17 @@ const toggleMenu = () => {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+.search-slide-enter-active,
+.search-slide-leave-active {
+    transition: all 0.3s ease;
+}
+
+.search-slide-enter-from,
+.search-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .logo-link:hover {

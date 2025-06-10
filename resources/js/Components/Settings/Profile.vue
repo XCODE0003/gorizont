@@ -69,7 +69,7 @@ const handleSubmit = async () => {
 <template>
     <div class="profile-settings-container flex flex-col gap-6">
         <div class="profile-header">
-            <h2 class="text-theme text-xl font-bold mb-4">Настройки профиля</h2>
+            <h2 class="text-theme mb-4 text-xl font-bold">Настройки профиля</h2>
             <p class="text-theme-secondary">Обновите информацию профиля и аватар</p>
         </div>
 
@@ -78,14 +78,14 @@ const handleSubmit = async () => {
             <div class="avatar-section flex flex-col gap-4">
                 <label class="text-theme font-semibold">Аватар</label>
                 <div class="avatar-wrapper flex items-center gap-4">
-                    <div class="avatar-container h-16 w-16 flex-shrink-0 select-none overflow-hidden relative rounded-full bg-theme-secondary border border-theme flex items-center justify-center">
+                    <div class="avatar-container bg-theme-secondary border-theme relative flex items-center justify-center flex-shrink-0 w-16 h-16 overflow-hidden border rounded-full select-none">
                         <span v-if="avatar === null && !fileUrl" class="text-theme uppercase">{{
                             name?.charAt(0)
                         }}</span>
-                        <img v-else-if="fileUrl" :src="fileUrl" alt="avatar" class="w-full h-full object-cover rounded-full" />
-                        <img v-else-if="avatar" :src="avatar" alt="avatar" class="w-full h-full object-cover rounded-full" />
+                        <img v-else-if="fileUrl" :src="fileUrl" alt="avatar" class="object-cover w-full h-full rounded-full" />
+                        <img v-else-if="avatar" :src="avatar" alt="avatar" class="object-cover w-full h-full rounded-full" />
                         <span v-else class="text-theme uppercase">{{ name?.charAt(0) }}</span>
-                        <label class="avatar-overlay w-full h-full absolute top-0 left-0 flex items-center justify-center cursor-pointer hover:opacity-80 transition-all duration-300 bg-black/50 rounded-full">
+                        <label class="avatar-overlay hover:opacity-80 bg-black/50 absolute top-0 left-0 flex items-center justify-center w-full h-full transition-all duration-300 rounded-full cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-6 text-white">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -101,7 +101,7 @@ const handleSubmit = async () => {
                         <p class="text-theme-muted text-xs">JPG, PNG. Максимум 2MB</p>
                     </div>
                 </div>
-                <div v-if="errors.avatar" class="error-message text-red-500 text-sm">
+                <div v-if="errors.avatar" class="error-message text-sm text-red-500">
                     {{ errors.avatar[0] }}
                 </div>
             </div>
@@ -118,7 +118,7 @@ const handleSubmit = async () => {
                         class="text-theme w-full bg-transparent outline-none"
                     />
                 </div>
-                <div v-if="errors.name" class="error-message text-red-500 text-sm">
+                <div v-if="errors.name" class="error-message text-sm text-red-500">
                     {{ errors.name[0] }}
                 </div>
             </div>
@@ -136,7 +136,7 @@ const handleSubmit = async () => {
             </div>
 
             <!-- Общие ошибки -->
-            <div v-if="errors.general" class="error-message text-red-500 text-sm">
+            <div v-if="errors.general" class="error-message text-sm text-red-500">
                 {{ errors.general[0] }}
             </div>
         </form>
@@ -145,10 +145,8 @@ const handleSubmit = async () => {
 
 <style scoped>
 .profile-settings-container {
-    background-color: var(--bg-theme-primary);
     padding: 1.5rem;
     border-radius: 1rem;
-    border: 1px solid var(--border-theme);
 }
 
 .avatar-container {

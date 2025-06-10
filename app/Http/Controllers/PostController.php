@@ -8,6 +8,7 @@ use App\Models\Articles;
 use App\Models\Like;
 use App\Models\Comment;
 use App\Services\Article\Get as GetService;
+use Illuminate\Support\Facades\Auth;
 class PostController extends Controller
 {
     public function new()
@@ -29,7 +30,7 @@ class PostController extends Controller
     {
 
         $article = Articles::find($id);
-        if (!$article || $article->user_id !== auth()->user()->id) {
+        if (!$article || $article->user_id !== Auth::user()->id) {
             return redirect('/');
         }
         return Inertia::render('Post/editPost', ['article' => $article]);
@@ -38,7 +39,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $article = Articles::find($id);
-        $user = auth()->user();
+        $user = Auth::user();
         if (!$article || $article->user_id !== $user->id) {
             return redirect('/');
         }
@@ -72,7 +73,7 @@ class PostController extends Controller
         );
 
         $article = Articles::find($id);
-        if (!$article || $article->user_id !== auth()->user()->id) {
+        if (!$article || $article->user_id !== Auth::user()->id) {
             return redirect('/');
         }
         $article->update([
@@ -87,21 +88,69 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'comment' => 'required|string',
+        $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+                'category_id' => 'required|exists:categories,id',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'comment' => 'required|boolean',
+            ],
+            [
+                'title.required' => 'Поле название обязательно для заполнения',
+                'title.string' => 'Поле название должно быть строкой',
+                'title.max' => 'Поле название не должно превышать 255 символов',
+                'content.required' => 'Поле содержание обязательно для заполнения',
+                'content.string' => 'Поле содержание должно быть строкой',
+                'category_id.required' => 'Поле категория обязательно для заполнения',
+                'category_id.exists' => 'Категория не найдена',
+                'image.required' => 'Поле изображение обязательно для заполнения',
+                'image.image' => 'Поле изображение должно быть изображением',
+                'image.mimes' => 'Поле изображение должно быть изображением',
+                'comment.required' => 'Поле комментарии обязательно для заполнения',
+                'comment.boolean' => 'Поле комментарии должно быть булевым',
+            ]
+        );
+
+        $article = Articles::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'category_id' => $request->category_id,
+            'image' => $request->file('image')->store('images', 'public'),
+            'comment' => $request->comment,
+            'user_id' => Auth::user()->id,
         ]);
+
+        return response()->json([
+            'message' => 'Статья успешно создана',
+            'article' => $article
+        ]);
+    }
+
+    public function storeComment(Request $request)
+    {
+        $request->validate([
+            'post_id' => 'required|integer|exists:articles,id',
+            'comment' => 'required|string|max:1000',
+        ]);
+
         $post = Articles::find($request->post_id);
         if (!$post) {
-            return response()->json(['message' => 'Статья не найдена']);
+            return response()->json(['message' => 'Статья не найдена'], 404);
         }
+
         $comment = Comment::create([
             'comment' => $request->comment,
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::user()->id,
             'article_id' => $post->id,
         ]);
         $comment->load('user');
 
-        return response()->json(['message' => 'Комментарий успешно создан', 'comment' => $comment]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Комментарий успешно создан',
+            'comment' => $comment
+        ]);
     }
 
     public function search(Request $request)
@@ -120,7 +169,7 @@ class PostController extends Controller
         if (!$article) {
             return response()->json(['success' => false, 'message' => 'Статья не найдена']);
         }
-        $user = auth()->user();
+        $user = Auth::user();
         $like = Like::where('article_id', $id)->where('user_id', $user->id)->first();
         if ($like) {
             $like->delete();

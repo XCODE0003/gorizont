@@ -12,6 +12,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\User;
 use App\Models\Articles;
+use App\Models\Subscribe;
+
 class ProfileController extends Controller
 {
     public function index($id)
@@ -20,7 +22,22 @@ class ProfileController extends Controller
         if(!$user) {
             return redirect('/');
         }
+
         $articles = Articles::where('user_id', $id)->get();
-        return Inertia::render('Profile', ['user' => $user, 'articles' => $articles]);
+        $subscribersCount = $user->subscribersCount();
+        $subscriptionsCount = $user->subscriptionsCount();
+
+        $isSubscribed = false;
+        if (Auth::check()) {
+            $isSubscribed = Subscribe::isSubscribed(Auth::user()->id, $id);
+        }
+
+        return Inertia::render('Profile', [
+            'user' => $user,
+            'articles' => $articles,
+            'subscribersCount' => $subscribersCount,
+            'subscriptionsCount' => $subscriptionsCount,
+            'isSubscribed' => $isSubscribed
+        ]);
     }
 }
